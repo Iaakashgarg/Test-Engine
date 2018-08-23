@@ -1,0 +1,218 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.0.89-community-nt
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema corejava4
+--
+
+CREATE DATABASE IF NOT EXISTS corejava4;
+USE corejava4;
+
+--
+-- Definition of table `logininfo`
+--
+
+DROP TABLE IF EXISTS `logininfo`;
+CREATE TABLE `logininfo` (
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) default NULL,
+  `rolename` varchar(100) default NULL,
+  `lastlogin` datetime default NULL,
+  PRIMARY KEY  (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `logininfo`
+--
+
+/*!40000 ALTER TABLE `logininfo` DISABLE KEYS */;
+INSERT INTO `logininfo` (`username`,`password`,`rolename`,`lastlogin`) VALUES 
+ ('aakash','garg','user','2017-08-11 23:15:46'),
+ ('admin','admin','admin','2017-08-11 23:20:23'),
+ ('rahul','rahul','student',NULL),
+ ('rohan','rohan','Student','2017-08-11 23:19:15');
+/*!40000 ALTER TABLE `logininfo` ENABLE KEYS */;
+
+
+--
+-- Definition of table `questioninfo`
+--
+
+DROP TABLE IF EXISTS `questioninfo`;
+CREATE TABLE `questioninfo` (
+  `questionid` int(11) NOT NULL auto_increment,
+  `testid` int(11) default NULL,
+  `sectionid` int(11) default NULL,
+  `questiontext` varchar(2000) default NULL,
+  `optiona` varchar(1000) default NULL,
+  `optionb` varchar(1000) default NULL,
+  `optionc` varchar(1000) default NULL,
+  `optiond` varchar(1000) default NULL,
+  `answer` enum('A','B','C','D') default NULL,
+  PRIMARY KEY  (`questionid`),
+  KEY `testid` (`testid`),
+  KEY `sectionid` (`sectionid`),
+  CONSTRAINT `questioninfo_ibfk_1` FOREIGN KEY (`testid`) REFERENCES `testinfo` (`testid`),
+  CONSTRAINT `questioninfo_ibfk_2` FOREIGN KEY (`sectionid`) REFERENCES `sectioninfo` (`sectionid`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `questioninfo`
+--
+
+/*!40000 ALTER TABLE `questioninfo` DISABLE KEYS */;
+INSERT INTO `questioninfo` (`questionid`,`testid`,`sectionid`,`questiontext`,`optiona`,`optionb`,`optionc`,`optiond`,`answer`) VALUES 
+ (1,1,4,'Which of the following sorting algorithms can be used to sort a random linked list with minimum time complexity?','Insertion Sort','Quick Sort','Heap Sort','Merge Sort','D'),
+ (2,1,4,'Which of the following sorting algorithms can be used to sort a random linked list with minimum time complexity?','Insertion Sort','Quick Sort','Heap Sort','Merge Sort','D'),
+ (3,4,5,'What is queue?','FIFO','LIFO','Stack','Algorithm','A'),
+ (4,1,5,'what is c?','PL','OOPS','SL','SS','C'),
+ (5,5,7,'How many types of array exists?','One','Two','Three','Four','B');
+/*!40000 ALTER TABLE `questioninfo` ENABLE KEYS */;
+
+
+--
+-- Definition of table `resultinfo`
+--
+
+DROP TABLE IF EXISTS `resultinfo`;
+CREATE TABLE `resultinfo` (
+  `resultid` int(11) NOT NULL auto_increment,
+  `testid` int(11) default NULL,
+  `username` varchar(100) default NULL,
+  `totalquestion` int(11) default NULL,
+  `totalattempt` int(11) default NULL,
+  `totalright` int(11) default NULL,
+  `totalmarks` int(11) default NULL,
+  `resultdate` datetime default NULL,
+  PRIMARY KEY  (`resultid`),
+  KEY `testid` (`testid`),
+  KEY `username` (`username`),
+  CONSTRAINT `resultinfo_ibfk_1` FOREIGN KEY (`testid`) REFERENCES `testinfo` (`testid`),
+  CONSTRAINT `resultinfo_ibfk_2` FOREIGN KEY (`username`) REFERENCES `logininfo` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `resultinfo`
+--
+
+/*!40000 ALTER TABLE `resultinfo` DISABLE KEYS */;
+INSERT INTO `resultinfo` (`resultid`,`testid`,`username`,`totalquestion`,`totalattempt`,`totalright`,`totalmarks`,`resultdate`) VALUES 
+ (1,1,NULL,3,3,2,40,NULL),
+ (2,1,NULL,3,3,2,40,NULL),
+ (3,1,'aakash',3,3,2,50,NULL),
+ (4,4,NULL,1,1,1,30,NULL),
+ (5,1,NULL,3,3,3,70,NULL),
+ (6,1,'aakash',3,3,3,70,NULL),
+ (7,1,NULL,3,3,3,70,NULL),
+ (8,5,'aakash',1,1,1,2,NULL),
+ (9,1,'aakash',3,0,0,0,NULL),
+ (10,1,'aakash',3,3,3,70,'2017-08-11 23:16:48'),
+ (11,4,'rohan',1,1,1,30,'2017-08-11 23:19:35');
+/*!40000 ALTER TABLE `resultinfo` ENABLE KEYS */;
+
+
+--
+-- Definition of table `sectioninfo`
+--
+
+DROP TABLE IF EXISTS `sectioninfo`;
+CREATE TABLE `sectioninfo` (
+  `sectionid` int(11) NOT NULL auto_increment,
+  `sectionname` varchar(100) default NULL,
+  `subjectid` varchar(20) default NULL,
+  `marks` int(11) default NULL,
+  PRIMARY KEY  (`sectionid`),
+  UNIQUE KEY `sectionname` (`sectionname`),
+  KEY `subjectid` (`subjectid`),
+  CONSTRAINT `sectioninfo_ibfk_1` FOREIGN KEY (`subjectid`) REFERENCES `subjectinfo` (`subjectid`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sectioninfo`
+--
+
+/*!40000 ALTER TABLE `sectioninfo` DISABLE KEYS */;
+INSERT INTO `sectioninfo` (`sectionid`,`sectionname`,`subjectid`,`marks`) VALUES 
+ (4,'Linked List','DS',20),
+ (5,'Queue','DS',30),
+ (6,'Thread','OS',15),
+ (7,'Array','C',2);
+/*!40000 ALTER TABLE `sectioninfo` ENABLE KEYS */;
+
+
+--
+-- Definition of table `subjectinfo`
+--
+
+DROP TABLE IF EXISTS `subjectinfo`;
+CREATE TABLE `subjectinfo` (
+  `subjectid` varchar(20) NOT NULL,
+  `subjectname` varchar(100) default NULL,
+  `description` text,
+  PRIMARY KEY  (`subjectid`),
+  UNIQUE KEY `subjectname` (`subjectname`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `subjectinfo`
+--
+
+/*!40000 ALTER TABLE `subjectinfo` DISABLE KEYS */;
+INSERT INTO `subjectinfo` (`subjectid`,`subjectname`,`description`) VALUES 
+ ('C','Programming with C','Structured Language'),
+ ('DS','Data Structures','Format to Organise Data'),
+ ('OS','Operating System','Interface Between User and Computer');
+/*!40000 ALTER TABLE `subjectinfo` ENABLE KEYS */;
+
+
+--
+-- Definition of table `testinfo`
+--
+
+DROP TABLE IF EXISTS `testinfo`;
+CREATE TABLE `testinfo` (
+  `testid` int(11) NOT NULL auto_increment,
+  `testname` varchar(100) default NULL,
+  `subjectid` varchar(20) default NULL,
+  `description` text,
+  `totalquestion` int(11) default NULL,
+  `testlevel` enum('Beginner','Intermediate','Advance') default NULL,
+  PRIMARY KEY  (`testid`),
+  KEY `subjectid` (`subjectid`),
+  CONSTRAINT `testinfo_ibfk_1` FOREIGN KEY (`subjectid`) REFERENCES `subjectinfo` (`subjectid`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `testinfo`
+--
+
+/*!40000 ALTER TABLE `testinfo` DISABLE KEYS */;
+INSERT INTO `testinfo` (`testid`,`testname`,`subjectid`,`description`,`totalquestion`,`testlevel`) VALUES 
+ (1,'Class Test','DS','Revision',10,'Beginner'),
+ (4,'Sessional','OS','Internal',15,'Intermediate'),
+ (5,'Sessional','C','Internals',10,'Beginner');
+/*!40000 ALTER TABLE `testinfo` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
